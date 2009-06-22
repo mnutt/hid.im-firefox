@@ -44,14 +44,14 @@
     <stringbundle id="hidim-strings" src="chrome://hidim/locale/hidim.properties"/>
   </stringbundleset>
 
-  <menupopup id="menu_ToolsPopup">
-    <menuitem id="hidim-hello" label="&hidim.label;" 
+  <menupopup id="menu_TorrentPopup">
+    <menuitem id="hidim-torrent" label="&hidim.label;" 
               oncommand="hidim.onMenuItemCommand(event);"/>
   </menupopup>
   <popup id="contentAreaContextMenu">
     <menuitem id="context-hidim" label="&hidimContext.label;"
               accesskey="&hidimContext.accesskey;"
-              insertafter="context-stop"
+              insertafter="context-saveimage"
               oncommand="hidim.onMenuItemCommand(event)"/>
   </popup>
 </overlay>
