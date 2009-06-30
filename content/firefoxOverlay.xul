@@ -38,8 +38,16 @@
 <?xml-stylesheet href="chrome://hidim/skin/overlay.css" type="text/css"?>
 <!DOCTYPE overlay SYSTEM "chrome://hidim/locale/hidim.dtd">
 <overlay id="hidim-overlay"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+         xmlns:html="http://www.w3.org/1999/xhtml">
   <script src="overlay.js"/>
+  <script src="sha1.js"/>
+  <script src="read_png.js"/>
+
+  <stack style="display:none" flex="1">
+      <html:canvas id="tmpCanvas" style="display: none"/>
+  </stack>
+
   <stringbundleset id="stringbundleset">
     <stringbundle id="hidim-strings" src="chrome://hidim/locale/hidim.properties"/>
   </stringbundleset>

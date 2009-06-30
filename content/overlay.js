@@ -54,6 +54,7 @@ var hidim = {
                    .createInstance(Components.interfaces.nsIFilePicker);
     fp.init(window, "Save Torrent As...", nsIFilePicker.modeSave);
     fp.defaultString = "sample.torrent";
+    readPng(gContextMenu.target);
     var rv = fp.show();
   }
 
