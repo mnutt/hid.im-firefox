@@ -109,6 +109,7 @@ function adjustForLineHeight(data, initialPosition, newHeight, imgHeight) {
 
   while(position + contentLength < data.length) {
     output = output.concat(data.slice(position, position + contentLength));
+    Firebug.Console.log(output);
     position = position + lineLength;
   }
   return output;
@@ -164,7 +165,7 @@ function readPng(img) {
 
   // Adjust the array so that we only read the data inside the data block
   var torrentData = adjustForLineHeight(torrent, dataStart, parseInt(lineHeight), img.height);
-
+  //Firebug.Console.log(torrentData);
   //var tempData = inGroupsOf(torrentData, 90);
   //for(var j in tempData) {
   //  var line = tempData[j];
@@ -173,25 +174,34 @@ function readPng(img) {
 
   // Fast-forward past the data we've already read
   var offset = key.length + lineHeight.length + 2;
-  Firebug.Console.log(torrentData.length);
+  //Firebug.Console.log(torrentData.length);
   torrentData.splice(0, offset);
-  Firebug.Console.log(toChars(torrentData));
+  //Firebug.Console.log(toChars(torrentData));
 
   var torrentFilename = retrieveString(torrentData);
   Firebug.Console.log("torrent filename: " + torrentFilename);
 
   var torrentHash = retrieveString(torrentData);
-  Firebug.Console.log("torrent hash: " + torrentHash);
+  Firebug.Console.log("torrent sha1: " + torrentHash);
 
   var contentLength = retrieveInteger(torrentData);
   Firebug.Console.log("torrent content length: " + contentLength);
 
-  var content = torrentData.slice(0, parseInt(contentLength));
+  var content = toChars(torrentData.slice(0, parseInt(contentLength))).join('');
 
-  Firebug.Console.log(content);
-  Firebug.Console.log(content.length);
+  var computedHash = hex_sha1(content + "");
+  Firebug.Console.log("computed sha1: " + computedHash);
 
-  Firebug.Console.log(binb2hex(core_sha1(content, content.length)));
+  var result = {
+    file: {
+      data: content,
+      sha1: computedHash
+    },
+    fileName: torrentFilename,
+    sha1: torrentHash,
+    length: contentLength,
+    pixelHeight: lineHeight
+  };
 
-  return toChars(content).join('');
+  return result;
 }

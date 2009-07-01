@@ -49,14 +49,29 @@ var hidim = {
     document.getElementById("context-hidim").hidden = !gContextMenu.onImage;
   },
   onMenuItemCommand: function(e) {
+    var torrent = readPng(gContextMenu.target);
+
+    // Check to make sure stated sha1 matches computed sha1
+    if(torrent.file.sha1 != torrent.sha1) {
+      alert("The torrent seems to be corrupted.");
+      return false;
+    }
+
     const nsIFilePicker = Components.interfaces.nsIFilePicker;
     var fp = Components.classes["@mozilla.org/filepicker;1"]
                    .createInstance(Components.interfaces.nsIFilePicker);
     fp.init(window, "Save Torrent As...", nsIFilePicker.modeSave);
-    fp.defaultString = "sample.torrent";
+    fp.appendFilter("Torrents", "*.torrent");
+    fp.appendFilters(0x01);
+
+    // Make sure it gets saved as a .torrent, no cheating...
+    if(!torrent.fileName.match(/\.torrent$/)) {
+      torrent.fileName = torrent.fileName + ".torrent";
+    }
+    fp.defaultString = torrent.fileName;
+
     var rv = fp.show();
     if (rv == nsIFilePicker.returnOK || rv == nsIFilePicker.returnReplace) {
-      var torrentBinary = readPng(gContextMenu.target);
 
       var aFile = Components.classes["@mozilla.org/file/local;1"]
       .createInstance(Components.interfaces.nsILocalFile);
@@ -67,7 +82,7 @@ var hidim = {
       createInstance(Components.interfaces.nsIFileOutputStream);
       stream.init(aFile, 0x02 | 0x08 | 0x20, 0600, 0); // write, create, truncate
 
-      stream.write(torrentBinary, torrentBinary.length);
+      stream.write(torrent.file.data, torrent.file.data.length);
       if (stream instanceof Components.interfaces.nsISafeOutputStream) {
 	stream.finish();
       } else {
