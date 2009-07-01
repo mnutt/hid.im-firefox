@@ -54,8 +54,27 @@ var hidim = {
                    .createInstance(Components.interfaces.nsIFilePicker);
     fp.init(window, "Save Torrent As...", nsIFilePicker.modeSave);
     fp.defaultString = "sample.torrent";
-    readPng(gContextMenu.target);
     var rv = fp.show();
+    if (rv == nsIFilePicker.returnOK || rv == nsIFilePicker.returnReplace) {
+      var torrentBinary = readPng(gContextMenu.target);
+
+      var aFile = Components.classes["@mozilla.org/file/local;1"]
+      .createInstance(Components.interfaces.nsILocalFile);
+      aFile.initWithPath(fp.file.path);
+      aFile.createUnique( Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 600);
+
+      var stream = Components.classes["@mozilla.org/network/safe-file-output-stream;1"].
+      createInstance(Components.interfaces.nsIFileOutputStream);
+      stream.init(aFile, 0x04 | 0x08 | 0x20, 0600, 0); // write, create, truncate
+
+      stream.write(torrentBinary, torrentBinary.length);
+      if (stream instanceof Components.interfaces.nsISafeOutputStream) {
+	stream.finish();
+      } else {
+	stream.close();
+      }
+    }
+
   }
 
 };

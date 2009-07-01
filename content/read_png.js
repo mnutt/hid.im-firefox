@@ -106,7 +106,7 @@ function adjustForLineHeight(data, initialPosition, newHeight, imgHeight) {
   var position = initialPosition;
   while(position < data.length) {
     output = output.concat(data.slice(position, position + newHeight));
-    position = position + imgHeight - 2;
+    position = position + newHeight;
   }
   return output;
 }
@@ -150,11 +150,13 @@ function readPng(img) {
   // Read in some initial data just to check the line height
   var initialData = torrent.slice(dataStart + key.length);
 
-  var lineHeight = retrieveInteger(initialData);
+  var lineHeight = retrieveInteger(initialData) * 3;
   Firebug.Console.log("line height: " + lineHeight);
 
+  Firebug.Console.log(inGroupsOf(toChars(torrent), 32);
+
   // Adjust the array so that we only read the data inside the data block
-  var torrentData = adjustForLineHeight(torrent, dataStart, parseInt(lineHeight), img.height);
+  var torrentData = adjustForLineHeight(torrent, dataStart, parseInt(lineHeight), img.height * 3);
 
   // Fast-forward past the data we've already read
   torrentData.splice(0, key.length + lineHeight.length + 2);
@@ -171,8 +173,9 @@ function readPng(img) {
   var content = torrentData.slice(0, parseInt(contentLength));
 
   Firebug.Console.log(toHex(content));
+  Firebug.Console.log(content.length);
 
   Firebug.Console.log(binb2hex(core_sha1(content, content.length)));
 
-  return content;
+  return toChars(content).join('');
 }
