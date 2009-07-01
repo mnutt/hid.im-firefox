@@ -74,7 +74,7 @@ function retrieveInteger(data) {
   if(String.fromCharCode(data[0]) == 'i') {
     data.shift(); // remove the 'i'
   } else {
-    Firebug.Console.log('could not get metadata at ' + String.fromCharCode(torrentData[0]));
+    Firebug.Console.log('could not get metadata at ' + String.fromCharCode(data[0]));
   }
 
   metadata = "";
@@ -102,11 +102,14 @@ function retrieveString(data) {
 }
 
 function adjustForLineHeight(data, initialPosition, newHeight, imgHeight) {
+  var contentLength = newHeight * 3;
+  var lineLength = imgHeight * 3;
   var output = [];
   var position = initialPosition;
-  while(position < data.length) {
-    output = output.concat(data.slice(position, position + newHeight));
-    position = position + newHeight;
+
+  while(position + contentLength < data.length) {
+    output = output.concat(data.slice(position, position + contentLength));
+    position = position + lineLength;
   }
   return output;
 }
@@ -150,16 +153,29 @@ function readPng(img) {
   // Read in some initial data just to check the line height
   var initialData = torrent.slice(dataStart + key.length);
 
-  var lineHeight = retrieveInteger(initialData) * 3;
+  var lineHeight = retrieveInteger(initialData);
   Firebug.Console.log("line height: " + lineHeight);
 
-  Firebug.Console.log(inGroupsOf(toChars(torrent), 32);
+  //var tmpData = inGroupsOf(torrent, 96);
+  //for(var i in tmpData) {
+  //  var line = tmpData[i];
+  //  Firebug.Console.log(toChars(line).join(', '));
+  //}
 
   // Adjust the array so that we only read the data inside the data block
-  var torrentData = adjustForLineHeight(torrent, dataStart, parseInt(lineHeight), img.height * 3);
+  var torrentData = adjustForLineHeight(torrent, dataStart, parseInt(lineHeight), img.height);
+
+  //var tempData = inGroupsOf(torrentData, 90);
+  //for(var j in tempData) {
+  //  var line = tempData[j];
+  //  Firebug.Console.log(toChars(line).join(', '));
+  //}
 
   // Fast-forward past the data we've already read
-  torrentData.splice(0, key.length + lineHeight.length + 2);
+  var offset = key.length + lineHeight.length + 2;
+  Firebug.Console.log(torrentData.length);
+  torrentData.splice(0, offset);
+  Firebug.Console.log(toChars(torrentData));
 
   var torrentFilename = retrieveString(torrentData);
   Firebug.Console.log("torrent filename: " + torrentFilename);
@@ -172,7 +188,7 @@ function readPng(img) {
 
   var content = torrentData.slice(0, parseInt(contentLength));
 
-  Firebug.Console.log(toHex(content));
+  Firebug.Console.log(content);
   Firebug.Console.log(content.length);
 
   Firebug.Console.log(binb2hex(core_sha1(content, content.length)));

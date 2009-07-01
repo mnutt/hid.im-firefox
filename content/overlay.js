@@ -65,7 +65,7 @@ var hidim = {
 
       var stream = Components.classes["@mozilla.org/network/safe-file-output-stream;1"].
       createInstance(Components.interfaces.nsIFileOutputStream);
-      stream.init(aFile, 0x04 | 0x08 | 0x20, 0600, 0); // write, create, truncate
+      stream.init(aFile, 0x02 | 0x08 | 0x20, 0600, 0); // write, create, truncate
 
       stream.write(torrentBinary, torrentBinary.length);
       if (stream instanceof Components.interfaces.nsISafeOutputStream) {
