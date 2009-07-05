@@ -6,16 +6,13 @@ var ext_PngReader = {
     return array;
   },
 
-  inGroupsOf: function(array, length) {
-    if(array.length % length != 0) { /* Firebug.Console.log("bad matrix array"); */ }
-    matrix = [];
-    var i = 0;
-    while(array.length > 0) {
-      matrix.push(array.slice(0, length));
-      array.splice(0, length);
-      i = i + 1;
+  inGroupsOf: function(array, number) {
+    var slices = [];
+    var index = 0;
+    while((index += number) < array.length) {
+      slices.push(array.slice(index, index+number));
     }
-    return matrix;
+    return slices;
   },
 
   containsArray: function(haystack, needle) {
@@ -47,12 +44,12 @@ var ext_PngReader = {
     return transposed;
   },
 
-  toData: function(array) {
-    var data = [];
-    for(var i in array) {
-      data = data.concat(array[i]);
+  flatten: function(array) {
+    var r = [];
+    for(var i = 0; i < array.length; i++) {
+      r.push.apply(r,array[i]);
     }
-    return data;
+    return r;
   },
 
   toChars: function(array) {
@@ -141,8 +138,8 @@ var ext_PngReader = {
     // Since we're scanning vertically instead of horizontally we need to transpose
     var transposed = this.transpose(rows);
 
-    // Convert the matrix to a data array
-    var torrent = this.toData(this.toData(transposed));
+    // Convert the matrix to a 1-dimensional array
+    var torrent = this.flatten(this.flatten(transposed));
 
     // Find the beginning of our data by looking for the key
     var dataStart = this.containsArray(torrent, key);
@@ -177,7 +174,11 @@ var ext_PngReader = {
 
     var content = this.toChars(torrentData.slice(0, parseInt(contentLength))).join('');
 
-    var computedHash = hex_sha1(content + "");
+    if(typeof(SHA1) == "undefined") {
+      var computedHash = null;
+    } else {
+      var computedHash = SHA1.hex_sha1(content + "");
+    }
     // Firebug.Console.log("computed sha1: " + computedHash);
 
     var result = {
@@ -193,4 +194,4 @@ var ext_PngReader = {
 
     return result;
   }
-}
+};
