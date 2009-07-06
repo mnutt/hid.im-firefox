@@ -71,18 +71,17 @@ for CHROME_SUBDIR in $CHROME_PROVIDERS; do
   find $CHROME_SUBDIR -path '*CVS*' -prune -o -type f -print | grep -v \~ >> files
 done
 
-zip -0 -r $JAR_FILE `cat files`
+# zip -0 -r $JAR_FILE `cat files`
 # The following statement should be used instead if you don't wish to use the JAR file
-#cp --verbose --parents `cat files` $TMP_DIR/chrome
+cp -v -r `cat files` $TMP_DIR/content
 
 # prepare components and defaults
 echo "Copying various files to $TMP_DIR folder..."
 for DIR in $ROOT_DIRS; do
-  mkdir $TMP_DIR/$DIR
+  mkdir -p $TMP_DIR/$DIR
   FILES="`find $DIR -path '*CVS*' -prune -o -type f -print | grep -v \~`"
   echo $FILES >> files
-  mkdir -p $TMP_DIR
-  cp -v $FILES $TMP_DIR
+  cp -r -v $FILES $TMP_DIR/$DIR
 done
 
 # Copy other files to the root of future XPI.
