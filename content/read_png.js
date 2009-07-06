@@ -1,4 +1,4 @@
-var ext_PngReader = {
+var PngReader = {
   removeTransparency: function(array) {
     for(var i = 0; i < array.length; i++) {
       array[i].splice(3, 1);
@@ -8,7 +8,7 @@ var ext_PngReader = {
 
   inGroupsOf: function(array, number) {
     var slices = [];
-    var index = 0;
+    var index = -number;
     while((index += number) < array.length) {
       slices.push(array.slice(index, index+number));
     }
@@ -72,7 +72,7 @@ var ext_PngReader = {
     if(String.fromCharCode(data[0]) == 'i') {
       data.shift(); // remove the 'i'
     } else {
-      Firebug.Console.log('could not get metadata at ' + this.toChars(data.slice(0, 10)).join(''));
+      // Firebug.Console.log('could not get metadata at ' + this.toChars(data.slice(0, 10)).join(''));
     }
 
     metadata = "";
@@ -144,9 +144,9 @@ var ext_PngReader = {
     // Find the beginning of our data by looking for the key
     var dataStart = this.containsArray(torrent, key);
     if(dataStart) {
-      Firebug.Console.log("Image contains an embedded torrent.");
+      // Firebug.Console.log("Image contains an embedded torrent.");
     } else {
-      Firebug.Console.log("Image does not contain an embedded torrent.");
+      // Firebug.Console.log("Image does not contain an embedded torrent.");
       return false;
     }
 
@@ -154,7 +154,7 @@ var ext_PngReader = {
     var initialData = torrent.slice(dataStart + key.length);
 
     var lineHeight = this.retrieveInteger(initialData);
-    Firebug.Console.log("line height: " + lineHeight);
+    // Firebug.Console.log("line height: " + lineHeight);
 
     // Adjust the array so that we only read the data inside the data block
     var torrentData = this.adjustForLineHeight(torrent, dataStart, parseInt(lineHeight), img.height);
@@ -164,14 +164,14 @@ var ext_PngReader = {
     torrentData.splice(0, offset);
 
     var torrentFilename = this.retrieveString(torrentData);
-    Firebug.Console.log("torrent filename: " + torrentFilename);
-    Firebug.Console.log(this.toChars(torrentData.slice(0, 50)).join(''));
+    // Firebug.Console.log("torrent filename: " + torrentFilename);
+    // Firebug.Console.log(this.toChars(torrentData.slice(0, 50)).join(''));
 
     var torrentHash = this.retrieveString(torrentData);
-    Firebug.Console.log("torrent sha1: " + torrentHash);
+    // Firebug.Console.log("torrent sha1: " + torrentHash);
 
     var contentLength = this.retrieveInteger(torrentData);
-    Firebug.Console.log("torrent content length: " + contentLength);
+    // Firebug.Console.log("torrent content length: " + contentLength);
 
     var content = this.toChars(torrentData.slice(0, parseInt(contentLength))).join('');
 
@@ -180,7 +180,7 @@ var ext_PngReader = {
     } else {
       var computedHash = SHA1.hex_sha1(content + "");
     }
-    Firebug.Console.log("computed sha1: " + computedHash);
+    // Firebug.Console.log("computed sha1: " + computedHash);
 
     var result = {
       file: {

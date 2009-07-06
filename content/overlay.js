@@ -49,7 +49,7 @@ var hidim = {
     document.getElementById("context-hidim").hidden = !gContextMenu.onImage;
   },
   onMenuItemCommand: function(e) {
-    var torrent = ext_PngReader.readPng(gContextMenu.target);
+    var torrent = PngReader.readPng(gContextMenu.target);
     if(!torrent) {
       alert("The image is either not a torrent or corrupted.");
       return false;
@@ -57,8 +57,8 @@ var hidim = {
 
     // Check to make sure stated sha1 matches computed sha1
     if(torrent.file.sha1 != torrent.sha1) {
-      alert("The torrent seems to be corrupted.  You can try saving it anyway, but it most likely won't work.");
-      // return false;
+      alert("The torrent seems to be corrupted.");
+      return false;
     }
 
     const nsIFilePicker = Components.interfaces.nsIFilePicker;
