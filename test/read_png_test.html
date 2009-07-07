@@ -28,6 +28,7 @@
   <div id="sample">
     <canvas id="tmpCanvas"></canvas>
     <img id="hidim_regular" src="images/regular.png">
+    <img id="hidim_embedded" src="images/embedded.png">
   </div>
 </div>
 
@@ -43,6 +44,13 @@
     testNormalHidim: function() { with(this) {
       netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
       var img = document.getElementById('hidim_regular');
+      var hidim = PngReader.readPng(img);
+      assertEqual(hidim.fileName, "sameer_verma_-_sugar_on_a_stick.torrent");
+    }},
+
+    testEmbeddedHidim: function() { with(this) {
+      netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
+      var img = document.getElementById('hidim_embedded');
       var hidim = PngReader.readPng(img);
       assertEqual(hidim.fileName, "sameer_verma_-_sugar_on_a_stick.torrent");
     }}
