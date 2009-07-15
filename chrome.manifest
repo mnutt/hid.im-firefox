@@ -3,6 +3,7 @@ content	hidim	content/
 locale	hidim	en-US	locale/en-US/
 locale  hidim pl-PL locale/pl-PL/
 locale	hidim	ru-RU	locale/ru-RU/
+locale  hidim   fr-FR   locale/fr-FR/
 
 skin	hidim	classic/1.0	skin/
 overlay	chrome://browser/content/browser.xul	chrome://hidim/content/firefoxOverlay.xul
