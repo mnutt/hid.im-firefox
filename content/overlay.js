@@ -80,7 +80,7 @@ var hidim = {
       var aFile = Components.classes["@mozilla.org/file/local;1"]
       .createInstance(Components.interfaces.nsILocalFile);
       aFile.initWithPath(fp.file.path);
-      aFile.createUnique( Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 600);
+      aFile.createUnique( Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0600);
 
       var stream = Components.classes["@mozilla.org/network/safe-file-output-stream;1"].
       createInstance(Components.interfaces.nsIFileOutputStream);
