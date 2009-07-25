@@ -7,6 +7,7 @@
   <script src="assets/jsunittest.js" type="text/javascript"></script>
 
   <script src="../content/read_png.js" type="text/javascript"></script>
+  <script src="../content/base64.js" type="text/javascript"></script>
   
   <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
 </head>
@@ -28,31 +29,48 @@
   <div id="sample">
     <canvas id="tmpCanvas"></canvas>
     <img id="hidim_regular" src="images/regular.png">
-    <img id="hidim_embedded" src="images/embedded.png">
+    <img id="hidim_embedded" src="images/embedded-crushed.png">
+    <img id="hidim_mspaint" src="images/mspaint-crushed.png">
   </div>
+
+  <div id="debugTable"></div>
 </div>
 
 <script type="text/javascript">
 // <![CDATA[
   new Test.Unit.Runner({
     setup: function() {
+      var debugContainer = document.getElementById('debugTable');
     },
     
     teardown: function() {
     },
     
     testNormalHidim: function() { with(this) {
-      netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
+      if(window.location.host == "") {
+        netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
+      }
       var img = document.getElementById('hidim_regular');
       var hidim = PngReader.readPng(img);
-      assertEqual(hidim.fileName, "sameer_verma_-_sugar_on_a_stick.torrent");
+      assertEqual("sameer_verma_-_sugar_on_a_stick.torrent", hidim.fileName);
+    }},
+
+    testMSPaintHidim: function() { with(this) {
+      if(window.location.host == "") {
+        netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
+      }
+      var img = document.getElementById('hidim_mspaint');
+      var hidim = PngReader.readPng(img);
+      assertEqual("sameer_verma_-_sugar_on_a_stick.torrent", hidim.fileName);
     }},
 
     testEmbeddedHidim: function() { with(this) {
-      netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
+      if(window.location.host == "") {
+        netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
+      }
       var img = document.getElementById('hidim_embedded');
       var hidim = PngReader.readPng(img);
-      assertEqual(hidim.fileName, "sameer_verma_-_sugar_on_a_stick.torrent");
+      assertEqual("legaltorrents_collections_-_web_development_icons_superset.torrent", hidim.fileName);
     }}
   }); 
 // ]]>
