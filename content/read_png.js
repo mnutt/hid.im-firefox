@@ -112,7 +112,7 @@ var PngReader = {
     return output;
   },
 
-  readPng: function(img) {
+  extractFromImg: function(img) {
     var canvas = document.getElementById('tmpCanvas');
     if(!canvas) {
       canvas = document.createElement('canvas');
@@ -123,8 +123,48 @@ var PngReader = {
     canvas.height = img.height;
     context.drawImage(img, 0, 0);
 
+    return context.getImageData(0, 0, img.width, img.height).data;
+  },
+
+  debugTable: function(img, container) {
+    var data = this.extractFromImg(img);
+
+    // Split the raw data into pixels (r, g, b, a)
+    var pixels = this.inGroupsOf(data, 4);
+
+    // Alpha is always set to fully opaque; we're not using it to store data so remove the alpha byte
+    pixels = this.removeTransparency(pixels);
+
+    // Group the pixel data into a matrix of rows, and reverse them since we are going to be reading upwards
+    var rows = this.inGroupsOf(pixels, img.width).reverse();
+
+    // Since we're scanning vertically instead of horizontally we need to transpose
+    var transposed = this.transpose(rows);
+
+    var table = document.createElement('table');
+
+    for(var i = 0; i < transposed.length; i++) {
+      var row = transposed[i];
+      var tr = document.createElement('tr');
+      for(var j = 0; j < row.length; j++) {
+	var pixel = row[j];
+	var color = "rgb("+ pixel.join(', ') + ")";
+	for(var k = 0; k < pixel.length; k++) {
+	  var td = document.createElement('td');
+	  td.innerHTML = pixel[k];
+	  tr.appendChild(td);
+	  td.style.backgroundColor = color;
+	}
+      }
+      table.appendChild(tr);
+    }
+
+    container.appendChild(table);
+  },
+
+  readPng: function(img) {
     var key = [104, 105, 100, 105, 109, 32, 105, 115, 32, 116, 111, 114, 114, 101, 110, 116, 115, 33];
-    var data = context.getImageData(0, 0, img.width, img.height).data;
+    var data = this.extractFromImg(img);
 
     // Split the raw data into pixels (r, g, b, a)
     var pixels = this.inGroupsOf(data, 4);
