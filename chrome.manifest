@@ -1,7 +1,8 @@
 content	hidim	content/
 
+locale	hidim	da-DK	locale/da-DK/
 locale	hidim	en-US	locale/en-US/
-locale  hidim pl-PL locale/pl-PL/
+locale  hidim 	pl-PL 	locale/pl-PL/
 locale	hidim	ru-RU	locale/ru-RU/
 
 skin	hidim	classic/1.0	skin/
