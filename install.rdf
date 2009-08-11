@@ -4,7 +4,7 @@
   <Description about="urn:mozilla:install-manifest">
     <em:id>hidim@nuttnet.net</em:id>
     <em:name>hid.im</em:name>
-    <em:version>0.3.2</em:version>
+    <em:version>0.3.3</em:version>
     <em:creator>Michael Nutt</em:creator>
     <em:description>Convert images to torrents</em:description>
     <em:targetApplication>
